@@ -35,7 +35,7 @@ export class UserResolver  {
   @Mutation(returns => UserResponse)
   async register(
     @Arg("options", type => UsernamePasswordInput) options: UsernamePasswordInput,
-    @Ctx() { em }: MyContext
+    @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
     // little validation
     if (options.username.length <= 2) return {
@@ -63,13 +63,14 @@ export class UserResolver  {
       };
       console.error(error);
     }
+    req.session.userId = user.id;
     return { user };
   }
 
   @Mutation(returns => UserResponse)
   async login(
     @Arg("options", type => UsernamePasswordInput) options: UsernamePasswordInput,
-    @Ctx() { em }: MyContext
+    @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
     const user = await em.findOne(User, { username: options.username });
     if (!user) return {
@@ -85,6 +86,19 @@ export class UserResolver  {
         message: "incorrect password"
       }]
     };
+
+    req.session.userId = user.id;
+
     return { user };
+  }
+
+  @Query(returns => User, { nullable: true })
+  async me(
+    @Ctx() { em, req }: MyContext
+  ): Promise<User|null> {
+    const userId = req.session.userId;
+    if (!userId) return null;
+    const user = await em.findOne(User, { id: userId });
+    return user;
   }
 }
