@@ -3,10 +3,11 @@ import { __prod__ } from "./constants";
 import { Options } from "@mikro-orm/core";
 import path from "path";
 import * as dotenv from "dotenv";
+import { User } from "./entities/User";
 dotenv.config();
 
 const options: Options = {
-  entities: [Post],
+  entities: [Post, User],
   migrations: {
     path: path.join(__dirname, "./migrations"),
     glob: "!(*.d).{js,ts}",

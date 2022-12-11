@@ -11,7 +11,7 @@ export class PostResolver  {
     return em.find(Post, {});
   }
 
-  @Query(returns  => Post, { nullable: true })
+  @Query(returns => Post, { nullable: true })
   post(
     @Arg("id", type => Int, { nullable: false }) id: number,
     @Ctx() { em }: MyContext
@@ -21,7 +21,7 @@ export class PostResolver  {
     });
   }
 
-  @Mutation(returns  => Post)
+  @Mutation(returns => Post)
   async createPost(
     @Arg("title", type => String, { nullable: false }) title: string,
     @Ctx() { em }: MyContext
@@ -31,7 +31,7 @@ export class PostResolver  {
     return post;
   }
 
-  @Mutation(returns  => Post, { nullable: true })
+  @Mutation(returns => Post, { nullable: true })
   async updatePost(
     @Arg("id", type => Int, { nullable: false }) id: number,
     @Arg("title", type => String, { nullable: true }) title: string,
@@ -46,7 +46,7 @@ export class PostResolver  {
     return post;
   }
 
-  @Mutation(returns  => Boolean)
+  @Mutation(returns => Boolean)
   async deletePost(
     @Arg("id", type => Int, { nullable: false }) id: number,
     @Ctx() { em }: MyContext
